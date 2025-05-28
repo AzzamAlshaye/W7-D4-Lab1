@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { FiSearch } from "react-icons/fi";
+import { FiSearch, FiPlus } from "react-icons/fi";
 
 export default function CharactersList() {
   const [characters, setCharacters] = useState([]);
@@ -11,6 +11,8 @@ export default function CharactersList() {
     gender: "male",
   });
   const [loading, setLoading] = useState(true);
+  const [showForm, setShowForm] = useState(false);
+  const formRef = useRef(null);
 
   const API_URL = "https://68219a92259dad2655afc3d3.mockapi.io/characters";
 
@@ -32,8 +34,17 @@ export default function CharactersList() {
       .then((res) => {
         setCharacters((prev) => [...prev, res.data]);
         setNewCharacter({ name: "", image: "", gender: "male" });
+        // Optionally hide form after adding
+        setShowForm(false);
       })
       .catch((err) => console.error("Failed to add character:", err));
+  };
+
+  const handlePlusClick = () => {
+    setShowForm(true);
+    setTimeout(() => {
+      formRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, 100);
   };
 
   if (loading) {
@@ -61,15 +72,21 @@ export default function CharactersList() {
           </p>
         </header>
 
-        {/* Search */}
+        {/* Search with plus icon */}
         <div className="relative w-full max-w-md mx-auto mb-10">
           <FiSearch className="absolute top-1/2 left-3 transform -translate-y-1/2 text-gray-400" />
           <input
             type="text"
             placeholder="Search characters..."
-            className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full pl-10 pr-12 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <FiPlus
+            className="absolute top-1/2 right-3 transform -translate-y-1/2 text-blue-600 cursor-pointer hover:text-blue-600  "
+            title="Add new Character"
+            size={24}
+            onClick={handlePlusClick}
           />
         </div>
 
@@ -79,28 +96,25 @@ export default function CharactersList() {
             {filtered.map((char) => (
               <div
                 key={char.id}
-                className="bg-white rounded-xl shadow-md hover:shadow-lg transition-transform transform hover:-translate-y-1 flex flex-col items-center"
+                className="bg-white rounded-xl shadow-md hover:shadow-lg transition-transform transform hover:-translate-y-1 p-5 flex flex-col items-center"
               >
                 <img
                   src={char.image}
                   alt={char.name}
-                  className="w-full h-40 object-fill rounded-md"
+                  className="w-full h-40 object-cover rounded-md mb-4"
                 />
-                <div className="flex flex-col items-center p-5 gap-5">
-                  <h3 className="text-lg font-semibold text-gray-800 mb-1">
-                    {char.name}
-                  </h3>
-                  <span
-                    className={`px-3 py-1 rounded-full text-sm font-medium 
-                    ${
-                      char.gender === "male"
-                        ? "bg-blue-100 text-blue-600"
-                        : "bg-pink-100 text-pink-600"
-                    }`}
-                  >
-                    {char.gender.charAt(0).toUpperCase() + char.gender.slice(1)}
-                  </span>
-                </div>
+                <h3 className="text-lg font-semibold text-gray-800 mb-1">
+                  {char.name}
+                </h3>
+                <span
+                  className={`px-3 py-1 rounded-full text-sm font-medium ${
+                    char.gender === "male"
+                      ? "bg-blue-100 text-blue-600"
+                      : "bg-pink-100 text-pink-600"
+                  }`}
+                >
+                  {char.gender.charAt(0).toUpperCase() + char.gender.slice(1)}
+                </span>
               </div>
             ))}
           </div>
@@ -110,48 +124,53 @@ export default function CharactersList() {
           </p>
         )}
 
-        {/* Add New Character Form */}
-        <div className="mt-16 bg-white shadow-lg rounded-xl p-8 max-w-xl mx-auto">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
-            Add New Character
-          </h2>
-          <div className="grid grid-cols-1 gap-4">
-            <input
-              type="text"
-              placeholder="Name"
-              className="border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              value={newCharacter.name}
-              onChange={(e) =>
-                setNewCharacter({ ...newCharacter, name: e.target.value })
-              }
-            />
-            <input
-              type="text"
-              placeholder="Image URL"
-              className="border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              value={newCharacter.image}
-              onChange={(e) =>
-                setNewCharacter({ ...newCharacter, image: e.target.value })
-              }
-            />
-            <select
-              className="border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              value={newCharacter.gender}
-              onChange={(e) =>
-                setNewCharacter({ ...newCharacter, gender: e.target.value })
-              }
-            >
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-            </select>
-            <button
-              onClick={handleAddCharacter}
-              className="mt-4 bg-indigo-600 text-white font-semibold py-3 rounded-lg hover:bg-indigo-700 transition"
-            >
-              Add Character
-            </button>
+        {/* Hidden Add New Character Form */}
+        {showForm && (
+          <div
+            ref={formRef}
+            className="mt-16 bg-white shadow-lg rounded-xl p-8 max-w-xl mx-auto"
+          >
+            <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
+              Add New Character
+            </h2>
+            <div className="grid grid-cols-1 gap-4">
+              <input
+                type="text"
+                placeholder="Name"
+                className="border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                value={newCharacter.name}
+                onChange={(e) =>
+                  setNewCharacter({ ...newCharacter, name: e.target.value })
+                }
+              />
+              <input
+                type="text"
+                placeholder="Image URL"
+                className="border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                value={newCharacter.image}
+                onChange={(e) =>
+                  setNewCharacter({ ...newCharacter, image: e.target.value })
+                }
+              />
+              <select
+                className="border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                value={newCharacter.gender}
+                onChange={(e) =>
+                  setNewCharacter({ ...newCharacter, gender: e.target.value })
+                }
+              >
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+              </select>
+              <button
+                onClick={handleAddCharacter}
+                className="mt-4 bg-indigo-600 text-white font-semibold py-3 rounded-lg hover:bg-indigo-700 transition"
+              >
+                Add Character
+              </button>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
