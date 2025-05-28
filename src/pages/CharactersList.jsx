@@ -79,26 +79,28 @@ export default function CharactersList() {
             {filtered.map((char) => (
               <div
                 key={char.id}
-                className="bg-white rounded-xl shadow-md hover:shadow-lg transition-transform transform hover:-translate-y-1 p-5 flex flex-col items-center"
+                className="bg-white rounded-xl shadow-md hover:shadow-lg transition-transform transform hover:-translate-y-1 flex flex-col items-center"
               >
                 <img
                   src={char.image}
                   alt={char.name}
-                  className="w-full h-40 object-cover rounded-md mb-4"
+                  className="w-full h-40 object-fill rounded-md"
                 />
-                <h3 className="text-lg font-semibold text-gray-800 mb-1">
-                  {char.name}
-                </h3>
-                <span
-                  className={`px-3 py-1 rounded-full text-sm font-medium 
+                <div className="flex flex-col items-center p-5 gap-5">
+                  <h3 className="text-lg font-semibold text-gray-800 mb-1">
+                    {char.name}
+                  </h3>
+                  <span
+                    className={`px-3 py-1 rounded-full text-sm font-medium 
                     ${
                       char.gender === "male"
                         ? "bg-blue-100 text-blue-600"
                         : "bg-pink-100 text-pink-600"
                     }`}
-                >
-                  {char.gender.charAt(0).toUpperCase() + char.gender.slice(1)}
-                </span>
+                  >
+                    {char.gender.charAt(0).toUpperCase() + char.gender.slice(1)}
+                  </span>
+                </div>
               </div>
             ))}
           </div>
