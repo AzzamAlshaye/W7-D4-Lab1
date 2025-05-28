@@ -16,11 +16,11 @@ export default function Footer() {
               className="h-10 w-auto"
             />
             <h3 className="text-2xl font-bold text-neutral-200">
-              The Rick and Morty API
+              The Characters API
             </h3>
           </div>
           <p className="text-neutral-400">
-            This website showcases characters from the Rick and Morty TV show.
+            This Website showcases characters from Different Media.
           </p>
           <div className="flex space-x-4">
             {[FaTwitter, FaDiscord, FaGithub].map((Icon, i) => (
@@ -66,19 +66,19 @@ export default function Footer() {
           <p>
             <strong className="text-neutral-200">Email:&nbsp;</strong>
             <a
-              href="mailto:info@RickandMortyAPI"
+              href="mailto:info@CharactersAPI"
               className="text-neutral-400 hover:text-neutral-200 transition focus:outline-none focus:underline"
             >
-              info@RickandMortyAPI
+              info@CharactersAPI
             </a>
           </p>
           <p>
             <strong className="text-neutral-200">Support:&nbsp;</strong>
             <a
-              href="mailto:support@RickandMortyAPI"
+              href="mailto:support@CharactersAPI"
               className="text-neutral-400 hover:text-neutral-200 transition focus:outline-none focus:underline"
             >
-              support@RickandMortyAPI
+              support@CharactersAPI
             </a>
           </p>
         </div>
@@ -87,7 +87,7 @@ export default function Footer() {
       {/* Bottom bar */}
       <div className="border-t border-neutral-700">
         <div className="max-w-7xl mx-auto px-6 py-4 text-center text-sm text-neutral-400">
-          &copy; 2025 The Rick and Morty API. All rights reserved.
+          &copy; 2025 The Characters API. All rights reserved.
         </div>
       </div>
     </footer>
