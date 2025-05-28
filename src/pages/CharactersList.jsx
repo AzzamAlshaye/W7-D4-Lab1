@@ -101,7 +101,7 @@ export default function CharactersList() {
                 <img
                   src={char.image}
                   alt={char.name}
-                  className="w-full h-40 object-cover rounded-md mb-4"
+                  className="w-full h-40 object-fill rounded-md mb-4"
                 />
                 <h3 className="text-lg font-semibold text-gray-800 mb-1">
                   {char.name}
